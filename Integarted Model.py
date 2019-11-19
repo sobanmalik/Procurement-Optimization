@@ -2010,72 +2010,7 @@ def model():
     # In[22]:
 
 
-    #other_operation_cost
-    Maintenance_Cost_and_Consumables=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Maintenance Cost & Consumables'),'bf1'].item()
-    power=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Power '),'bf1'].item()
-    RMHS_Allocation=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='RMHS Allocation'),'bf1'].item()
-    Refractories=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Refractories'),'bf1'].item()
-    Manpower_Supply=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Manpower Supply'),'bf1'].item()
-    Job_Contract_Outsourcing=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Job Contract & Outsourcing'),'bf1'].item()
-    Manpower_Tonnage=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Manpower Tonnage'),'bf1'].item()
-    Manpower_on_Roll=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Manpower on Roll'),'bf1'].item()
-    other_operation_cost=Maintenance_Cost_and_Consumables+power+RMHS_Allocation+Refractories+Manpower_Supply+Job_Contract_Outsourcing+Manpower_Tonnage+Manpower_on_Roll
-
-    #Coke - Gross Basis
-    final_cost_mt=final_cost/coke_required_per_month_tonnes
-    Credit_For_Nut_Coke_10_25_mm=((coke_yield.loc[(coke_yield["Coke "]=='Nut Coke'),'Yield of coke %']*coke_yield.loc[(coke_yield["Coke "]=='Nut Coke'),'Selling Price per MT'])/100).item()
-    Credit_For_Coke_Fines_0_10_mm=((coke_yield.loc[(coke_yield["Coke "]=='Fines'),'Yield of coke %']*coke_yield.loc[(coke_yield["Coke "]=='Fines'),'Selling Price per MT'])/100).item()
-    Coke_Gross_Basis=final_cost_mt-Credit_For_Nut_Coke_10_25_mm-Credit_For_Coke_Fines_0_10_mm
-    Coke_Gross_Basis_req=final_cost-(Credit_For_Nut_Coke_10_25_mm+Credit_For_Coke_Fines_0_10_mm)*coke_required_per_month_tonnes
-
-    #utilities
-    BF_Gas_NM3_t_=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='BF Gas (NM3/t)'),'bf1'].item()
-    Utilites=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Utilites '),'bf1'].item()
-    utilities=BF_Gas_NM3_t_+Utilites
-    utilities
-
-    #Credits for Flue gas GCAL/tn
-    Credits_for_Flue_gas_GCAL_tn=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Credits for Flue gas GCAL/tn'),'bf1'].item()
-    Credits_for_Flue_gas_GCAL_tn
-
-    #Total_Operational_Coke_Cost
-    Total_Operational_Coke_Cost=Coke_Gross_Basis+utilities+other_operation_cost-Credits_for_Flue_gas_GCAL_tn
-    Total_Operational_Coke_Cost_req=Total_Operational_Coke_Cost*coke_required_per_month_tonnes
-    #Indirect OH 
-    Indirect_Personnel=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Indirect Personnel'),'bf1'].item()
-    Indirect_Stores=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Indirect Stores'),'bf1'].item()
-    Indirect_Power=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Indirect Power'),'bf1'].item()
-    Outsourcing_II=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Outsourcing - II'),'bf1'].item()
-    Administrative_Overhead=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Administrative Overhead'),'bf1'].item()
-    Corporate_Expenses=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Corporate Expenses'),'bf1'].item()
-    indirect_oh=Indirect_Personnel+Indirect_Stores+Indirect_Power+Outsourcing_II+Administrative_Overhead+Corporate_Expenses
-    indirect_oh_req=indirect_oh*coke_required_per_month_tonnes
-    #Total Variable Cost 
-    total_variable_cost=Total_Operational_Coke_Cost+indirect_oh
-    total_variable_cost_req=Total_Operational_Coke_Cost_req+indirect_oh_req
-    #Total Cost
-    finance_cost=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Finance Cost'),'bf1'].item()
-    depreciation_cost=cost_calculation.loc[(cost_calculation['Cost Calculation (INR)']=='Depreciation'),'bf1'].item()
-    fixed_cost=finance_cost+depreciation_cost
-    total_cost=total_variable_cost+fixed_cost
-    total_cost_req=total_variable_cost_req+(fixed_cost*coke_required_per_month_tonnes)
-    #final model
-    #Total Cost of Usable Coke at Blast Furnace
-    Total_Cost_of_Usable_Coke_at_Blast_Furnace=total_cost/(coke_yield.loc[(coke_yield["Coke "]=='BF Coke '),'Yield of coke %'].item()/100) 
-    Total_Cost_of_Usable_Coke_at_Blast_Furnace_req=total_cost_req/(coke_yield.loc[(coke_yield["Coke "]=='BF Coke '),'Yield of coke %'].item()/100)
-
-
-
-    # In[23]:
-
-
-    #Cost of Coke for MTHM 
-    Cost_of_Coke_for_MTHM=Total_Cost_of_Usable_Coke_at_Blast_Furnace*(thumb_rules.loc[(thumb_rules['Thumb Rules']=='Consumption Rate'),'BF1'].item()/1000)
-    Total_Cost_of_Usable_Coke_at_Blast_Furnace_req
-
-
-
-
+    
     # In[29]:
 
 
@@ -2176,15 +2111,7 @@ def model():
     thumb_rules_P1=pd.read_csv("Data Input/Plant/Coke Plant/P1/Thumb_rule_P1.csv")
     thumb_rules_P1['BF1']=thumb_rules_P1.loc[:,'BF1'].str.replace('%','').astype(float)
     burning_loss_P1=thumb_rules_P1.loc[(thumb_rules_P1["Thumb Rules"]=='Burning Loss'),'BF1']
-    end_vm_P1_P1=thumb_rules_P1.loc[(thumb_rules_P1["Thumb Rules"]=='End VM'),'BF1']
-    end_moisture_P1=thumb_rules_P1.loc[(thumb_rules_P1["Thumb Rules"]=='End Moisture'),'BF1']
-    burning_loss_P1=burning_loss_P1.item()
-    end_vm_P1_P1=end_vm_P1_P1.item()
-    end_moisture_P1=end_moisture_P1.item()
-    inc_fact_coke_ash_P1=thumb_rules_P1.loc[(thumb_rules_P1["Thumb Rules"]=='Incremental Factor for Coke Ash'),'BF1'].item()
-    sulphur_retention_P1=thumb_rules_P1.loc[(thumb_rules_P1["Thumb Rules"]=='Sulphur Retention'),'BF1'].item()
-    sulphur_retention_P1=sulphur_retention_P1/100
-
+   
     # In[10]:
 
 
@@ -2267,53 +2194,20 @@ def model():
     if coke_constraint_dict_P1['Vitrinite(lower)'].get()==1:
         model+= lpSum((coal_data_P1.loc[(coal_data_P1['category']==i),'vitrinite'])*var_coke_P1[i] for i in var_coke_P1)>=bf1_P1.loc[(bf1_P1['parameters']=='Vitrinite'),'lower_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
 
-    #log(fluidity) 
-    if coke_constraint_dict_P1['Log(Fluidity)(lower)'].get()==1:
-        model+= lpSum((log10(coal_data_P1.loc[(coal_data_P1['category']==i),'Fluidity'])*100)*var_coke_P1[i] for i in var_coke_P1)>=bf1_P1.loc[(bf1_P1['parameters']=='Log(Fluidity)'),'lower_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
-    if coke_constraint_dict_P1['Log(Fluidity)(upper)'].get()==1:
-        model+= lpSum((log10(coal_data_P1.loc[(coal_data_P1['category']==i),'Fluidity'])*100)*var_coke_P1[i] for i in var_coke_P1)<=bf1_P1.loc[(bf1_P1['parameters']=='Log(Fluidity)'),'upper_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
-
-
-    #V9-V14
-    if coke_constraint_dict_P1['V9-V14(upper)'].get()==1:
-        model+= lpSum((coal_data_P1.loc[(coal_data_P1['category']==i),'v9_v14'])*var_coke_P1[i] for i in var_coke_P1)<=bf1_P1.loc[(bf1_P1['parameters']=='V9-V14'),'upper_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
-    if coke_constraint_dict_P1['V9-V14(lower)'].get()==1:
-        model+= lpSum((coal_data_P1.loc[(coal_data_P1['category']==i),'v9_v14'])*var_coke_P1[i] for i in var_coke_P1)>=bf1_P1.loc[(bf1_P1['parameters']=='V9-V14'),'lower_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
-
-    #Sulphur:No upper limit
-    if coke_constraint_dict_P1['Sulphur(lower)'].get()==1:
-        model+= lpSum((coal_data_P1.loc[(coal_data_P1['category']==i),'sulphur'])*var_coke_P1[i] for i in var_coke_P1)>=bf1_P1.loc[(bf1_P1['parameters']=='Sulphur'),'lower_limit']*lpSum(var_coke_P1[j]for j in var_coke_P1)
-
+    
     #blend_type_P1_constraints
     #lower limit
     if coke_constraint_dict_P1['Prime Hard Mix(lower)'].get()==1:
         model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Prime Hard'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Prime Hard'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
     if coke_constraint_dict_P1['Semi Hard Mix(lower)'].get()==1:
         model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Semi Hard'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Semi Hard'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
-    if coke_constraint_dict_P1['Semi Soft Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Semi Soft'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Semi Soft'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
-    if coke_constraint_dict_P1['PCI Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='PCI'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='PCI'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
-    if coke_constraint_dict_P1['Pet Coke Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Pet Coke'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Pet Coke'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
-    if coke_constraint_dict_P1['Non Coking Coal Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Non Coking Coal'),'coals_P1'])>=((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Non Coking Coal'),'lower_limit_perc'])/100)*lpSum(var_coke_P1[j] for j in var_coke_P1)
-
+    
     #upper limit
     if coke_constraint_dict_P1['Prime Hard Mix(upper)'].get()==1:
         model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Prime Hard'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Prime Hard'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
     if coke_constraint_dict_P1['Semi Hard Mix(lower)'].get()==1:
         model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Semi Hard'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Semi Hard'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
-    if coke_constraint_dict_P1['Semi Soft Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Semi Soft'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Semi Soft'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
-    if coke_constraint_dict_P1['PCI Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='PCI'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='PCI'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
-    if coke_constraint_dict_P1['Pet Coke Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Pet Coke'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Pet Coke'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
-    if coke_constraint_dict_P1['Non Coking Coal Mix(lower)'].get()==1:
-        model+=lpSum(var_coke_P1[i] for i in coals_P1.loc[(coals_P1['type']=='Non Coking Coal'),'coals_P1'])-lpSum((blend_bf1_P1.loc[(blend_bf1_P1['blend_type_P1']=='Non Coking Coal'),'upper_limit_perc']/100)*lpSum(var_coke_P1[k] for k in var_coke_P1))<=0
-
-
+    
     # In[15]:
 
 
@@ -2363,93 +2257,7 @@ def model():
     # In[31]:
 
 
-    cost_calculation_P1=pd.read_csv('Data Input/Head Office/Coke Plant/P1/Cost Calculation_P1.csv')
-    cost_calculation_P1.rename(columns={'Unnamed: 1':'bf1'},inplace=True)
-                                    #'Unnamed: 2':'bf2',
-                                    #'Unnamed: 3':'total'},inplace=True)
-    cost_calculation_P1['bf1']=cost_calculation_P1['bf1'].str.replace(',','')
-    cost_calculation_P1['bf1']=cost_calculation_P1['bf1'].str.replace('-','0').astype(float)
-
-    # In[22]:
-    CO_Gas_NM3_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='CO Gas (NM3/t)'),'bf1'].item()
-    CO_Gas_flaring_NM3_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='CO Gas flaring (NM3/t)'),'bf1'].item()
-    MP_Steam_NM3_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='MP Steam (NM3/t)'),'bf1'].item()
-    Nitrogen_NM3_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Nitrogen (NM3/t)'),'bf1'].item()
-    Water_Treatment_Exp_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Water Treatment Exp'),'bf1'].item()
-    Credits_for_Coke_Oven_Gas_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Credits for Coke Oven Gas'),'bf1'].item()
-    Credits_for_Tar_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Credits for Tar'),'bf1'].item()
-    Credits_for_Cruze_Benzol_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Credits for Cruze Benzol'),'bf1'].item()
-    Direct_Admin_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Direct Admin'),'bf1'].item()
-    Direct_Manpower_Allied_Co_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Direct Manpower/Allied Co'),'bf1'].item()
-    Direct_Salary_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Direct Salary'),'bf1'].item()
-    Corporate_Allocation_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Corporate Allocation'),'bf1'].item()
-    Stock_Yard_Marketing_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Stock Yard & Marketing'),'bf1'].item()
-    Indirect_OH_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Indirect OH'),'bf1'].item()
-    CGP_FC_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='CGP FC'),'bf1'].item()
-    Water_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Water'),'bf1'].item()
-
-    #other_operation_cost
-    Maintenance_Cost_and_Consumables_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Maintenance Cost & Consumables'),'bf1'].item()
-    power_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Power '),'bf1'].item()
-    RMHS_Allocation_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='RMHS Allocation'),'bf1'].item()
-    #Refractories_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Refractories'),'bf1'].item()
-    #Manpower_Supply_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Manpower Supply'),'bf1'].item()
-    Job_Contract_Outsourcing_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Job Contract & Outsourcing'),'bf1'].item()
-    #Manpower_Tonnage_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Manpower Tonnage'),'bf1'].item()
-    #Manpower_on_Roll_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Manpower on Roll'),'bf1'].item()
-    other_operation_cost_P1=Maintenance_Cost_and_Consumables_P1+power_P1+RMHS_Allocation_P1+Job_Contract_Outsourcing_P1+Water_Treatment_Exp_P1
-
-    #Coke - Gross Basis
-    final_cost_mt_P1=final_cost_P1/coke_required_per_month_tonnes_P1
-    Credit_For_Nut_Coke_10_25_mm_P1=((coke_yield_P1.loc[(coke_yield_P1["Coke "]=='Nut Coke'),'Yield of coke %']*coke_yield_P1.loc[(coke_yield_P1["Coke "]=='Nut Coke'),'Selling Price per MT'])/100).item()
-    Credit_For_Coke_Fines_0_10_mm_P1=((coke_yield_P1.loc[(coke_yield_P1["Coke "]=='Fines'),'Yield of coke %']*coke_yield_P1.loc[(coke_yield_P1["Coke "]=='Fines'),'Selling Price per MT'])/100).item()
-    Coke_Gross_Basis_P1=final_cost_mt_P1-Credit_For_Nut_Coke_10_25_mm_P1-Credit_For_Coke_Fines_0_10_mm_P1
-    Coke_Gross_Basis_req_P1=final_cost_P1-(Credit_For_Nut_Coke_10_25_mm_P1+Credit_For_Coke_Fines_0_10_mm_P1)*coke_required_per_month_tonnes_P1
-
-    #utilities
-    BF_Gas_NM3_t_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='BF Gas (NM3/t)'),'bf1'].item()
-    #Utilites_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Utilites '),'bf1'].item()
-    utilities_P1=BF_Gas_NM3_t_P1+CO_Gas_NM3_t_P1+CO_Gas_flaring_NM3_t_P1+Nitrogen_NM3_t_P1+MP_Steam_NM3_t_P1
-    utilities_P1
-
-    #Credits for Flue gas GCAL/tn
-    #Credits_for_Flue_gas_GCAL_tn_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Credits for Flue gas GCAL/tn'),'bf1'].item()
-    #Credits_for_Flue_gas_GCAL_tn_P1
-    Total_Credit_P1=Credits_for_Coke_Oven_Gas_P1+Credits_for_Tar_P1+Credits_for_Cruze_Benzol_P1
-
-    #Total_Operational_Coke_Cost
-    Total_Operational_Coke_Cost_P1=Coke_Gross_Basis_P1+utilities_P1+other_operation_cost_P1-Total_Credit_P1
-    Total_Operational_Coke_Cost_req_P1=Total_Operational_Coke_Cost_P1*coke_required_per_month_tonnes_P1
-    #Indirect OH 
-    indirect_oh_P1=Direct_Admin_P1 +Direct_Manpower_Allied_Co_P1+Direct_Salary_P1+Corporate_Allocation_P1+Stock_Yard_Marketing_P1+Indirect_OH_t_P1+CGP_FC_P1+Water_P1
-    indirect_oh_req_P1=indirect_oh_P1*coke_required_per_month_tonnes_P1
-    #Total Variable Cost 
-    total_variable_cost_P1=Total_Operational_Coke_Cost_P1+indirect_oh_P1
-    total_variable_cost_req_P1=Total_Operational_Coke_Cost_req_P1+indirect_oh_req_P1
-    #Total Cost
-    finance_cost_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Finance Cost'),'bf1'].item()
-    depreciation_cost_P1=cost_calculation_P1.loc[(cost_calculation_P1['Cost Calculation (INR)']=='Depreciation'),'bf1'].item()
-    fixed_cost_P1=finance_cost_P1+depreciation_cost_P1
-    total_cost_P1=total_variable_cost_P1+fixed_cost_P1
-    total_cost_req_P1=total_variable_cost_req_P1+(fixed_cost_P1*coke_required_per_month_tonnes_P1)
-    #final model
-    #Total Cost of Usable Coke at Blast Furnace
-    Total_Cost_of_Usable_Coke_at_Blast_Furnace_P1=total_cost_P1/(coke_yield_P1.loc[(coke_yield_P1["Coke "]=='BF Coke '),'Yield of coke %'].item()/100) 
-    Total_Cost_of_Usable_Coke_at_Blast_Furnace_req_P1=total_cost_req_P1/(coke_yield_P1.loc[(coke_yield_P1["Coke "]=='BF Coke '),'Yield of coke %'].item()/100)
-
-
-
-    # In[23]:
-
-
-    #Cost of Coke for MTHM 
-    Cost_of_Coke_for_MTHM_P1=Total_Cost_of_Usable_Coke_at_Blast_Furnace_P1*(thumb_rules_P1.loc[(thumb_rules_P1['Thumb Rules']=='Consumption Rate'),'BF1'].item()/1000)
-
-
-
-
-    # In[32]:
-
+    
 
     #change constants to values from bmo materials table
     coals['Ash']=[coal_data.loc[coal_data['category']==i,'Ash'].item()*thumb_rules.loc[(thumb_rules['Thumb Rules']=='Incremental Factor for Coke Ash'),'BF1'].item() for i in var_coke_P2]
@@ -2809,22 +2617,6 @@ def model():
     bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()*Kg_by_Thm_P1]
     #bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Basicity (B1)','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Basicity (B1)','Min'].item()*P_total_P1]
     bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Amount','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Amount','Min'].item()*Kg_by_Thm_P1]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Phosphorus','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Phosphorus','Min'].item()*Kg_by_Thm_P1]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='MgO','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='MgO','Min'].item()*(CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000)]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Al2O3','min(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Al2O3','Min'].item()*(CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000)]
-
-    #updating max(total)_P1
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Amount','max(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Amount','Max'].item()*Kg_by_Thm_P1]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Sulphur in HM','max(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Sulphur in HM','Max'].item()*Kg_by_Thm_P1/100000]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Phosphorus','max(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Phosphorus','Max'].item()*Kg_by_Thm_P1]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='MgO','max(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='MgO','Max'].item()*(CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000)]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Al2O3','max(total)_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Al2O3','Max'].item()*(CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000)]
-
-    #P2
-    #bmo_chemistry_constraints
-    #updating min(total)_P2
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','min(total)_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','Min'].item()*Kg_by_Thm_P2]
-    #bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Basicity (B1)','min(total)_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Basicity (B1)','Min'].item()*P_total_P2]
     bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Amount','min(total)_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Amount','Min'].item()*Kg_by_Thm_P2]
     bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Phosphorus','min(total)_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Phosphorus','Min'].item()*Kg_by_Thm_P2]
     bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='MgO','min(total)_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='MgO','Min'].item()*(CaO_total_P2+MgO_total_P2+(SiO2_total_P2-(Si_total_P2/0.466))+Al2O3_total_P2)/(bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','Min'].item()/1000)]
@@ -2845,25 +2637,10 @@ def model():
     #P1
     bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Actual Values_P1']=[Fe_total_P1*1000]
     bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Amount','Actual Values_P1']=[((CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000))*1000]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Sulphur in HM','Actual Values_P1']=[(S_total_P1/1000)-0.217]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Phosphorus','Actual Values_P1']=[P_total_P1*100]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='CaO','Actual Values_P1']=[(CaO_total_P1-(56/32*0.7*(CaO_total_P1+MgO_total_P1+(SiO2_total_P1-(Si_total_P1/0.466))+Al2O3_total_P1)/(bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='FE (Kg/THM)','Min'].item()/1000)/100))*100]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='MgO','Actual Values_P1']=[MgO_total_P1*100]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='SiO2','Actual Values_P1']=[(SiO2_total_P1-(Si_total_P1/0.466))*100]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Al2O3','Actual Values_P1']=[Al2O3_total_P1*100]
-    bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='Slag Basicity (B1)','Actual Values_P1']=[bmo_chemistry_table_P1.loc[bmo_chemistry_table_P1['Parameters']=='CaO','Actual Values_P1'].item()]
-
+   
     #P2
     bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','Actual Values_P2']=[Fe_total_P2*1000]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Amount','Actual Values_P2']=[((CaO_total_P2+MgO_total_P2+(SiO2_total_P2-(Si_total_P2/0.466))+Al2O3_total_P2)/(bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','Min'].item()/1000))*1000]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Sulphur in HM','Actual Values_P2']=[(S_total_P2/1000)-0.217]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Phosphorus','Actual Values_P2']=[P_total_P2*100]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='CaO','Actual Values_P2']=[(CaO_total_P2-(56/32*0.7*(CaO_total_P2+MgO_total_P2+(SiO2_total_P2-(Si_total_P2/0.466))+Al2O3_total_P2)/(bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='FE (Kg/THM)','Min'].item()/1000)/100))*100]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='MgO','Actual Values_P2']=[MgO_total_P2*100]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='SiO2','Actual Values_P2']=[(SiO2_total_P2-(Si_total_P2/0.466))*100]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Al2O3','Actual Values_P2']=[Al2O3_total_P2*100]
-    bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='Slag Basicity (B1)','Actual Values_P2']=[bmo_chemistry_table_P2.loc[bmo_chemistry_table_P2['Parameters']=='CaO','Actual Values_P2'].item()]
-
+    
 
     # In[47]:
 
@@ -3292,29 +3069,11 @@ def model():
     sinter_P1=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Sinter','Actual'])
     sinter_P1_max_wtd=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Sinter','max(wtd)'])
     sinter_P1_min_wtd=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Sinter','min(wtd)'])
-    pellet_P1=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Pellet','Actual'])
-    pellet_P1_max_wtd=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Pellet','max(wtd)'])
-    pellet_P1_min_wtd=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Pellet','min(wtd)'])
-    lump_P1=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Lump','Actual'])
-    lump_P1_max_wtd=output(spl_input_P1.loc[spl_input_P1['Parameter']=='Lump','max(wtd)'])
-    hot_metal_prodction_P1=output(Kg_by_Thm_P1)
-    charge_capacity_P1_op=output(charge_capacity_P1)
-    dri_pellet_P1_model=output(lpSum(var_fines_dri_P1)/Pellet_Sp_Cons_Ton_P1_model)
-
+    
     #P2
     sinter_P2=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Sinter','Actual'])
     sinter_P2_max_wtd=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Sinter','max(wtd)'])
-    sinter_P2_min_wtd=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Sinter','min(wtd)'])
-    pellet_P2=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Pellet','Actual'])
-    pellet_P2_max_wtd=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Pellet','max(wtd)'])
-    pellet_P2_min_wtd=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Pellet','min(wtd)'])
-    lump_P2=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Lump','Actual'])
-    lump_P2_max_wtd=output(spl_input_P2.loc[spl_input_P2['Parameter']=='Lump','max(wtd)'])
-
-    hot_metal_prodction_P2=output(Kg_by_Thm_P2)
-    charge_capacity_P2_op=output(charge_capacity_P2)
-    dri_pellet_P2_model=output(lpSum(var_fines_dri_P2)/Pellet_Sp_Cons_Ton_P2_model)
-
+    
 
     # In[81]:
 
@@ -3433,12 +3192,7 @@ def model():
 
 
     #sinter_P1_chemistry_output_df_P2['Actual']=
-    fe_sinter_P1=output((lpSum(mines.loc[mines['Plant']=='P1','Fe(new)_fines'])+lpSum(materials['Fe(new)_P1']))*100)
-    SiO2_sinter_P1=output((lpSum(mines.loc[mines['Plant']=='P1','SiO2(new)_fines'])+lpSum(materials['SiO2(new)_P1']))*100)
-    al2o3_sinter_P1=output((lpSum(mines.loc[mines['Plant']=='P1','Al2O3(new)_fines'])+lpSum(materials['Al2O3(new)_P1']))*100)
-    cao_sinter_P1=output((lpSum(mines.loc[mines['Plant']=='P1','CaO(new)_fines'])+lpSum(materials['CaO(new)_P1']))*100)
-    mgo_sinter_P1=output((lpSum(mines.loc[mines['Plant']=='P1','MgO(new)_fines'])+lpSum(materials['MgO(new)_P1']))*100)
-    basicity_P1=output((lpSum(mines.loc[mines['Plant']=='P1','CaO(new)_fines'])+lpSum(materials['CaO(new)_P1']))*100)
+    output((lpSum(mines.loc[mines['Plant']=='P1','CaO(new)_fines'])+lpSum(materials['CaO(new)_P1']))*100)
     feeding_rate_P1=output((lpSum(P1_fines_variables_list)+lpSum(var_P1)-var_P1['RF Internal'])/(no_of_days_in_month*24))
     sinter_P1_chemistry_dict_P1={'Parameter':['Fe','SiO2','Al2O3','CaO','MgO','Basicity','Residue Production','Feeding Rate'],
                                        'Actual':[fe_sinter_P1,SiO2_sinter_P1,al2o3_sinter_P1,cao_sinter_P1,mgo_sinter_P1,basicity_P1,(lpSum(mines.loc[mines['Plant']=='P1','Residue_fines'])+lpSum(materials['Residue_P1'])).value(),feeding_rate_P1]}
@@ -3452,14 +3206,7 @@ def model():
     fe_sinter_P2=output((lpSum(mines.loc[mines['Plant']=='P2','Fe(new)_fines'])+lpSum(materials['Fe(new)_P2']))*100)
     SiO2_sinter_P2=output((lpSum(mines.loc[mines['Plant']=='P2','SiO2(new)_fines'])+lpSum(materials['SiO2(new)_P2']))*100)
     al2o3_sinter_P2=output((lpSum(mines.loc[mines['Plant']=='P2','Al2O3(new)_fines'])+lpSum(materials['Al2O3(new)_P2']))*100)
-    cao_sinter_P2=output((lpSum(mines.loc[mines['Plant']=='P2','CaO(new)_fines'])+lpSum(materials['CaO(new)_P2']))*100)
-    mgo_sinter_P2=output((lpSum(mines.loc[mines['Plant']=='P2','MgO(new)_fines'])+lpSum(materials['MgO(new)_P2']))*100)
-    basicity_P2=output((lpSum(mines.loc[mines['Plant']=='P2','CaO(new)_fines'])+lpSum(materials['CaO(new)_P2']))*100)
-    feeding_rate_P2=output((lpSum(P2_fines_variables_list)+lpSum(var_P2)-var_P2['RF Internal'])/(no_of_days_in_month*24))
-    sinter_P2_chemistry_dict_P2={'Parameter':['Fe','SiO2','Al2O3','CaO','MgO','Basicity','Residue Production','Feeding Rate'],
-                                           'Actual':[fe_sinter_P2,SiO2_sinter_P2,al2o3_sinter_P2,cao_sinter_P2,mgo_sinter_P2,basicity_P2,(lpSum(mines.loc[mines['Plant']=='P2','Residue_fines'])+lpSum(materials['Residue_P2'])).value(),feeding_rate_P2]}
-    sinter_P2_chemistry_output_df_P2=pd.DataFrame(data=sinter_P2_chemistry_dict_P2).round(1)
-    sinter_P2_chemistry_output_df_P2
+    
 
 
     spl_output_dict_P1={'Quantinty(In Tonnes)':[sinter_P1,pellet_P1,lump_P1]}
@@ -3967,16 +3714,7 @@ def model():
     fines_mines_dict={'Possibility':[]}
     fines_mines_df=pd.DataFrame(data=fines_mines_dict)
     fines_mines_df['Possibility']=[i for i in var_fines]
-    fines_mines_df['Mine']=[mines.loc[mines['possibilities']==i,'Mine'].item() for i in fines_mines_df['Possibility']]
-    fines_mines_df['Mine Owner']=[mines.loc[mines['possibilities']==i,'Mine Owners'].item() for i in fines_mines_df['Possibility']]
-    fines_mines_df['Plant']=[mines.loc[mines['possibilities']==i,'Plant'].item() for i in fines_mines_df['Possibility']]
-    fines_mines_df['Siding']=[mines.loc[mines['possibilities']==i,'Siding'].item() for i in fines_mines_df['Possibility']]
-    fines_mines_df['Quantity(Tonnes)']=[output(var_fines[i]) for i in var_fines]
-    fines_mines_df['Cost']=[output(var_fines[i]*mines.loc[mines['possibilities']==i,'Total Cost Fines'].item()) for i in var_fines]
-    fines_mines_df=fines_mines_df.loc[fines_mines_df['Quantity(Tonnes)']!=0].round(1).reset_index(drop=True)
-    fines_mines_df=fines_mines_df.iloc[:,1:]
-    fines_mines_df
-
+    
 
     # In[109]:
 
@@ -3985,15 +3723,7 @@ def model():
     lumps_mines_df=pd.DataFrame(data=lumps_mines_dict)
     lumps_mines_df['Possibility']=[i for i in var_lumps]
     #for i in lumps_mines_df['Possibility']:
-    lumps_mines_df['Mine']=[mines_lumps.loc[mines_lumps['possibilities']==i,'Mine'].item() for i in lumps_mines_df['Possibility']]
-    lumps_mines_df['Mine Owner']=[mines_lumps.loc[mines_lumps['possibilities']==i,'Mine Owners'].item() for i in lumps_mines_df['Possibility']]
-    lumps_mines_df['Plant']=[mines_lumps.loc[mines_lumps['possibilities']==i,'Plant'].item() for i in lumps_mines_df['Possibility']]
-    lumps_mines_df['Siding']=[mines_lumps.loc[mines_lumps['possibilities']==i,'Siding'].item() for i in lumps_mines_df['Possibility']]
-    lumps_mines_df['Quantity(Tonnes)']=[output(var_lumps[i]) for i in var_lumps]
-    lumps_mines_df['Cost']=[output(var_lumps[i]*mines_lumps.loc[mines_lumps['possibilities']==i,'Total Cost Lumps'].item()) for i in var_lumps]
-    lumps_mines_df=lumps_mines_df.loc[lumps_mines_df['Quantity(Tonnes)']!=0].round(1).reset_index(drop=True)
-    lumps_mines_df=lumps_mines_df.iloc[:,1:]
-    lumps_mines_df
+    
 
 
     # In[110]:
@@ -4058,15 +3788,7 @@ def model():
     pellet_to_P2_dri_df['Possibility']=[i for i in var_fines_dri_P2]
     #for i in pellet_to_P2_dri_df['Possibility']:
     pellet_to_P2_dri_df['Mine']=[mines_dri_P2.loc[mines_dri_P2['possibilities']==i,'Mine'].item() for i in pellet_to_P2_dri_df['Possibility']]
-    pellet_to_P2_dri_df['Mine Owner']=[mines_dri_P2.loc[mines_dri_P2['possibilities']==i,'Mine Owners'].item() for i in pellet_to_P2_dri_df['Possibility']]
-    pellet_to_P2_dri_df['Plant']=[mines_dri_P2.loc[mines_dri_P2['possibilities']==i,'Plant'].item() for i in pellet_to_P2_dri_df['Possibility']]
-    pellet_to_P2_dri_df['Siding']=[mines_dri_P2.loc[mines_dri_P2['possibilities']==i,'Siding'].item() for i in pellet_to_P2_dri_df['Possibility']]
-    pellet_to_P2_dri_df['Quantity(In Tonnes)']=[output(var_fines_dri_P2[i]) for i in var_fines_dri_P2]
-    pellet_to_P2_dri_df['Cost']=[output(var_fines_dri_P2[i]*mines_dri_P2.loc[mines_dri_P2['possibilities']==i,'Total Cost Fines'].item()) for i in var_fines_dri_P2]
-    pellet_to_P2_dri_df=pellet_to_P2_dri_df.loc[pellet_to_P2_dri_df['Quantity(In Tonnes)']!=0].round(1).reset_index(drop=True)
-    pellet_to_P2_dri_df=pellet_to_P2_dri_df.iloc[:,1:]
-    pellet_to_P2_dri_df
-
+    
 
     # In[114]:
 
