@@ -5,5 +5,4 @@ Procurement based contribution optimization models for a leading steel manufactu
 Libraries used: Pulp(Linear Programming), Tkinter(User Interface), Pandas, Numpy
 
 Amateur Interface:
-![](maxit.jpg)
 ![](maxit1.jpg)
