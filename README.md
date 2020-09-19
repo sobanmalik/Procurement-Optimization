@@ -6,3 +6,4 @@ Libraries used: Pulp(Linear Programming), Tkinter(User Interface), Pandas, Numpy
 
 Amateur Interface:
 ![](maxit.jpg)
+![](maxit1.jpg)
